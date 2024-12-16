@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاييد سكن - مكتبة اقرأ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fa;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1, h2, p {
+            margin: 0 0 20px 0;
+        }
+
+        .input-field {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            padding: 5px;
+            width: auto;
+            display: inline;
+            margin: 0 5px;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #3b5998;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .button:hover {
+            background-color: #2d4373;
+        }
+    </style>
+    <script>
+        function goToNextPage(event) {
+            event.preventDefault();
+            const requestData = {
+                citizenName: document.querySelector('input[name="citizenName"]').value,
+                motherName: document.querySelector('input[name="motherName"]').value,
+                birthYear: document.querySelector('input[name="birthYear"]').value,
+                wifeName: document.querySelector('input[name="wifeName"]').value,
+                addressedTo: document.querySelector('input[name="addressedTo"]').value,
+                purpose: document.querySelector('input[name="purpose"]').value
+            };
+            sessionStorage.setItem('requestData', JSON.stringify(requestData));
+            window.location.href = 'file-upload.html';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>السيد قائمقام قضاء الفلوجة المحترم</h1>
+        <h2 style="text-align:center;">م/ طلب</h2>
+        <p>إني المواطن <input type="text" class="input-field" name="citizenName" placeholder="الاسم"> من سكنة قضاء الفلوجة، اسم الأم <input type="text" class="input-field" name="motherName" placeholder="اسم الأم"> المواليد <input type="text" class="input-field" name="birthYear" placeholder="المواليد"> اسم الزوجة <input type="text" class="input-field" name="wifeName" placeholder="اسم الزوجة"> يرجى تزويدي بكتاب تاييد سكن معنون إلى <input type="text" class="input-field" name="addressedTo" placeholder="الجهة المعنونة"> لغرض <input type="text" class="input-field" name="purpose" placeholder="الغرض"> هذا ولكم الأمر مع التقدير</p>
+        <button class="button" onclick="goToNextPage(event)">التالي</button>
+    </div>
+</body>
+</html>

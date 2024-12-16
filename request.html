@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلب موافقة سكن - مكتبة اقرأ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .a4-container {
+            width: 100%;
+            max-width: 210mm;
+            padding: 20px;
+            background-color: white;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        .a4-content {
+            text-align: right;
+            direction: rtl;
+        }
+
+        .input-field {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1em;
+            margin: 5px 0;
+            width: calc(100% - 24px);
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: #1a73e8;
+        }
+
+        .button {
+            background-color: #1a73e8;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #155ab6;
+            transform: scale(1.05);
+        }
+
+        .button:active {
+            background-color: #0d3a9b;
+            transform: scale(0.95);
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function addFamilyMemberField() {
+            var container = document.getElementById('family-members');
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'input-field';
+            input.name = 'familyMember[]';
+            input.placeholder = 'اسم فرد آخر من الأسرة';
+            container.appendChild(input);
+            container.appendChild(document.createElement('br'));
+        }
+
+        function addFileField() {
+            var container = document.getElementById('file-uploads');
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.className = 'input-field';
+            input.name = 'files[]';
+            input.accept = '.png, .jpg, .jpeg, .pdf';
+            container.appendChild(input);
+            container.appendChild(document.createElement('br'));
+        }
+
+        function submitRequest(event) {
+            event.preventDefault(); // لمنع إعادة تحميل الصفحة
+            var formData = new FormData(document.getElementById('request-form'));
+            // إرسال البيانات باستخدام Fetch API إلى لوحة التحكم
+            fetch('http://localhost:3000/submit-request', { // استبدل هذا الرابط بعنوان URL الصحيح
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('تم إرسال الطلب بنجاح!');
+                console.log(data);
+            })
+            .catch(error => {
+                alert('حدث خطأ أثناء إرسال الطلب: ' + error.message);
+                console.error('خطأ:', error);
+            });
+        }
+
+        function previewRequest() {
+            var printContents = document.getElementById('request-form').innerHTML;
+            var modal = window.open('', '_blank', 'height=842,width=595');
+            modal.document.write('<html><head><title>معاينة الطلب</title>');
+            modal.document.write('<link rel="stylesheet" href="styles.css">');
+            modal.document.write('</head><body class="a4-container">');
+            modal.document.write(printContents);
+            modal.document.write('</body></html>');
+            modal.document.close();
+            modal.focus();
+        }
+    </script>
+</head>
+<body>
+    <form id="request-form" onsubmit="submitRequest(event)">
+        <div class="a4-container">
+            <div class="a4-content">
+                <p style="text-align: right; font-size: 22px; margin-bottom: 20px;">السيد قائمقام الفلوجة المحترم،<br><br></p>
+                <p style="text-align: center; font-size: 22px; margin-bottom: 20px;">م/ طلب<br><br></p>
+                <p style="font-size: 18px; text-align: right; line-height: 1.8;">
+                    إني المواطن <span class="input-wrapper"><input type="text" class="input-field" name="citizenName" placeholder="الاسم"></span> من سكنة قضاء الفلوجة، أرجو التفضل بالموافقة على سكني في قضاء الفلوجة / حي <span class="input-wrapper"><input type="text" class="input-field" name="neighborhood" placeholder="اسم الحي"></span> قرب <span class="input-wrapper"><input type="text" class="input-field" name="nearPlace" placeholder="مكان قريب"></span>. هذا ولكم الأمر مع التقدير.
+                    <br><br>
+                    اسم الأم: <input type="text" class="input-field" name="motherName" placeholder="اسم الأم">
+                    <br>
+                    اسم الزوجة: <input type="text" class="input-field" name="wifeName" placeholder="اسم الزوجة">
+                    <br>
+                    المواليد: <input type="text" class="input-field" name="birthYear" placeholder="المواليد">
+                    <br>
+                    عدد أفراد الأسرة: <input type="number" class="input-field" name="familyMembersCount" placeholder="عدد أفراد الأسرة">
+                    <br>
+                    رقم الهاتف: <input type="text" class="input-field" name="phoneNumber" placeholder="رقم الهاتف">
+                    <br>
+                    أسماء أفراد الأسرة:
+                    <div id="family-members">
+                        <input type="text" class="input-field" name="familyMember[]" placeholder="اسم فرد من الأسرة">
+                        <br>
+                    </div>
+                    <button type="button" onclick="addFamilyMemberField()" class="button">إدراج حقل</button>
+                    <br><br>
+                    رفع الملفات (صور أو PDF):
+                    <div id="file-uploads">
+                        <input type="file" class="input-field" name="files[]" accept=".png, .jpg, .jpeg, .pdf" multiple>
+                        <br>
+                    </div>
+                    <button type="button" onclick="addFileField()" class="button">+</button>
+                </p>
+            </div>
+        </div>
+        <div class="actions">
+            <button type="button" onclick="previewRequest()" class="button">معاينة</button>
+            <button type="submit" class="button">إرسال الطلب</button>
+            <a href="approval.html" class="button">رجوع</a>
+        </div>
+    </form>
+</body>
+</html>
