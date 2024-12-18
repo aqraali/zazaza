@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شكوى - مكتبة اقرأ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fa;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: calc(100% - 22px);
+            display: block;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .button {
+            width: calc(50% - 20px);
+            padding: 10px;
+            background-color: #3b5998;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 10px 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+            font-size: 18px;
+        }
+
+        .button:hover {
+            background-color: #2d4373;
+        }
+
+        .button-secondary {
+            background-color: #ccc;
+            color: black;
+        }
+
+        .button-secondary:hover {
+            background-color: #aaa;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+    <script>
+        function sendComplaint(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('fullName', document.querySelector('input[name="fullName"]').value);
+            formData.append('address', document.querySelector('input[name="address"]').value);
+            formData.append('mukhtarName', document.querySelector('input[name="mukhtarName"]').value);
+            formData.append('phoneNumber', document.querySelector('input[name="phoneNumber"]').value);
+            formData.append('complaint', document.querySelector('textarea[name="complaint"]').value);
+            formData.append('complainantNames', document.querySelector('input[name="complainantNames"]').value);
+
+            fetch('/submit-complaint', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('تم إرسال الشكوى بنجاح!');
+                } else {
+                    alert('حدث خطأ أثناء إرسال الشكوى.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء إرسال الشكوى.');
+            });
+        }
+
+        function addField() {
+            const container = document.getElementById('additionalFields');
+            const newField = document.createElement('input');
+            newField.setAttribute('type', 'text');
+            newField.setAttribute('name', 'additionalField');
+            newField.setAttribute('class', 'input-field');
+            newField.setAttribute('placeholder', 'حقل إضافي');
+            container.appendChild(newField);
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>شكوى</h1>
+        <form onsubmit="sendComplaint(event)">
+            <input type="text" class="input-field" name="fullName" placeholder="الاسم الرباعي" required>
+            <input type="text" class="input-field" name="address" placeholder="العنوان الكامل" required>
+            <input type="text" class="input-field" name="mukhtarName" placeholder="اسم المختار">
+            <input type="tel" class="input-field" name="phoneNumber" placeholder="رقم الهاتف">
+            <textarea class="input-field" name="complaint" placeholder="موضوع الشكوى" required></textarea>
+            <input type="text" class="input-field" name="complainantNames" placeholder="اسم المشتكين (اختياري)">
+            
+            <div id="additionalFields"></div>
+            <button type="button" class="button" onclick="addField()">مشتكي  اخر</button>
+            
+            <div class="buttons">
+                <button type="submit" class="button">إرسال</button>
+                <button type="button" class="button button-secondary" onclick="goBack()">رجوع</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
