@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نقل أثاث - مكتبة اقرأ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fa;
+            direction: rtl;
+            text-align: right;
+            position: relative;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: calc(100% - 22px);
+            display: block;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .button {
+            width: calc(50% - 20px);
+            padding: 10px;
+            background-color: #3b5998;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 10px 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+            font-size: 18px;
+        }
+
+        .button:hover {
+            background-color: #2d4373;
+        }
+
+        .button-secondary {
+            background-color: #ccc;
+            color: black;
+        }
+
+        .button-secondary:hover {
+            background-color: #aaa;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+    <script>
+        function sendRequest(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('fullName', document.querySelector('input[name="fullName"]').value);
+            formData.append('surname', document.querySelector('input[name="surname"]').value);
+            formData.append('address', document.querySelector('input[name="address"]').value);
+            formData.append('nearestLandmark', document.querySelector('input[name="nearestLandmark"]').value);
+            formData.append('moveFrom', document.querySelector('input[name="moveFrom"]').value);
+            formData.append('moveTo', document.querySelector('input[name="moveTo"]').value);
+            formData.append('phoneNumber', document.querySelector('input[name="phoneNumber"]').value);
+
+            fetch('/submit-move-request', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('تم إرسال الطلب بنجاح!');
+                } else {
+                    alert('حدث خطأ أثناء إرسال الطلب.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء إرسال الطلب.');
+            });
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>نقل أثاث</h1>
+        <form onsubmit="sendRequest(event)">
+            <input type="text" class="input-field" name="fullName" placeholder="الاسم الرباعي" required>
+            <input type="text" class="input-field" name="surname" placeholder="اللقب" required>
+            <input type="text" class="input-field" name="address" placeholder="العنوان" required>
+            <input type="text" class="input-field" name="nearestLandmark" placeholder="أقرب نقطة دالة" required>
+            <input type="text" class="input-field" name="moveFrom" placeholder="نقل أثاث من" required>
+            <input type="text" class="input-field" name="moveTo" placeholder="نقل أثاث إلى" required>
+            <input type="tel" class="input-field" name="phoneNumber" placeholder="رقم الهاتف" required>
+            
+            <div class="buttons">
+                <button type="submit" class="button">إرسال</button>
+                <button type="button" class="button button-secondary" onclick="goBack()">رجوع</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
