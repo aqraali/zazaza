@@ -85,7 +85,7 @@
             formData.append('complaint', document.querySelector('textarea[name="complaint"]').value);
             formData.append('complainantNames', document.querySelector('input[name="complainantNames"]').value);
 
-            fetch('/submit-complaint', {
+            fetch('http://localhost:3000/submit-complaint', { // إضافة عنوان السيرفر
                 method: 'POST',
                 body: formData
             })
@@ -130,7 +130,7 @@
             <input type="text" class="input-field" name="complainantNames" placeholder="اسم المشتكين (اختياري)">
             
             <div id="additionalFields"></div>
-            <button type="button" class="button" onclick="addField()">مشتكي  اخر</button>
+            <button type="button" class="button" onclick="addField()">مشتكي اخر</button>
             
             <div class="buttons">
                 <button type="submit" class="button">إرسال</button>
