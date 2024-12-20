@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إرسال الشكاوى - مكتبة اقرأ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fa;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 100%;
+            display: block;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 18px;
+            box-sizing: border-box;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #3b5998;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: #2d4373;
+        }
+    </style>
+    <script>
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+
+            const response = await fetch('http://localhost:3000/submit-complaint', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            if (result.status === 'success') {
+                alert('تم إرسال الشكوى بنجاح!');
+            } else {
+                alert('حدث خطأ أثناء إرسال الشكوى.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>إرسال الشكاوى</h1>
+        <form onsubmit="handleSubmit(event)">
+            <input type="text" class="input-field" name="fullName" placeholder="الاسم الرباعي" required>
+            <input type="text" class="input-field" name="address" placeholder="العنوان الكامل" required>
+            <input type="text" class="input-field" name="mukhtarName" placeholder="اسم المختار">
+            <input type="tel" class="input-field" name="phoneNumber" placeholder="رقم الهاتف">
+            <textarea class="input-field" name="complaint" placeholder="موضوع الشكوى" required></textarea>
+            <input type="text" class="input-field" name="complainantNames" placeholder="اسم المشتكين (اختياري)">
+            <button type="submit" class="button">إرسال الشكوى</button>
+        </form>
+    </div>
+</body>
+</html>
